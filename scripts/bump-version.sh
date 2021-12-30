@@ -33,8 +33,11 @@ update_version() {
     rm "$1".bak
 }
 
-update_version "package.json"
-update_version ".github/workflows/main.yml"
+files=("package.json" ".github/workflows/main.yml" "README.md")
 
-git add package.json .github/workflows/main.yml
+for file in "${files[@]}"; do
+  update_version "$file"
+done
+
+git add ${files[@]}
 git commit -m "bump version number"

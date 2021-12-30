@@ -4,8 +4,11 @@ inputs:
   tag_name:
     description: 'The name of the tag. This should come from the webhook payload, `github.GITHUB_REF` when a user pushes a new tag'
     required: true
-  description:
-    description: The discription to use (can be markdown)
+  body:
+    description: The release notes to use (can be markdown)
+    required: false
+  body_file:
+    description: A file to the release notes
     required: false
   draft:
     description: '`true` to create a draft (unpublished) release, `false` to create a published one. Default: `true`'
