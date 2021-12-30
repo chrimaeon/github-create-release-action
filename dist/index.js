@@ -49,10 +49,14 @@ require('./sourcemap-register.js');/******/
             Object.defineProperty(exports, "__esModule", ({value: true}));
             const core = __importStar(__nccwpck_require__(2186));
             const github_1 = __nccwpck_require__(5438);
+            const fs_1 = __nccwpck_require__(7147);
+            const util_1 = __nccwpck_require__(3837);
+            const readFileAsync = (0, util_1.promisify)(fs_1.readFile);
             var ActionInputs;
             (function (ActionInputs) {
                 ActionInputs["TAG_NAME"] = "tag_name";
-                ActionInputs["DESCRIPTION"] = "description";
+                ActionInputs["BODY"] = "body";
+                ActionInputs["BODY_FILE"] = "body_file";
                 ActionInputs["DRAFT"] = "draft";
             })(ActionInputs || (ActionInputs = {}));
             var ActionOutputs;
@@ -65,10 +69,19 @@ require('./sourcemap-register.js');/******/
             async function run() {
                 try {
                     const tag_name = core.getInput(ActionInputs.TAG_NAME, {required: true}).replace('refs/tags/', '');
-                    const description = core.getInput(ActionInputs.DESCRIPTION);
+                    const body = core.getInput(ActionInputs.BODY);
+                    const bodyFile = core.getInput(ActionInputs.BODY_FILE);
                     const draft = core.getInput(ActionInputs.DRAFT) === 'true';
                     const github = (0, github_1.getOctokit)(process.env.GITHUB_TOKEN).rest;
                     const {owner, repo} = github_1.context.repo;
+                    let bodyFileContent = null;
+                    if (bodyFile) {
+                        try {
+                            bodyFileContent = await readFileAsync(bodyFile, {encoding: 'utf-8'});
+                        } catch (e) {
+                            return core.setFailed(e);
+                        }
+                    }
                     const {
                         data: {
                             id: releaseId,
@@ -80,7 +93,7 @@ require('./sourcemap-register.js');/******/
                         repo,
                         tag_name,
                         name: tag_name,
-                        body: description,
+                        body: bodyFileContent || body,
                         draft,
                     });
                     core.setOutput(ActionOutputs.ID, releaseId);
