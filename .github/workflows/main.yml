@@ -15,4 +15,4 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           tag_name: ${{ github.ref }}
-          description: "this is a sample description"
+          body: "this is a sample description"
