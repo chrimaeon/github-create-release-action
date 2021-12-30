@@ -1,0 +1,30 @@
+{
+  "name": "github-create-release-action",
+  "version": "0.1.0-alpha01",
+  "description": "Create a Github Release from a git tag",
+  "repository": "git@github.com:chrimaeon/github-create-release-action.git",
+  "author": "Christian Grach <christian.grach@cmgapps.com>",
+  "license": "Apache-2.0",
+  "main": "lib/main.js",
+  "scripts": {
+    "build": "tsc",
+    "package": "ncc build --source-map --license licenses.txt",
+    "lint:check": "eslint './src/**/*.ts'",
+    "lint:fix": "eslint --fix './src/**/*.ts'"
+  },
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "16",
+    "@typescript-eslint/eslint-plugin": "^5.8.1",
+    "@typescript-eslint/parser": "^5.8.1",
+    "@vercel/ncc": "^0.33.1",
+    "eslint": "^8.5.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.5.1",
+    "typescript": "^4.5.4"
+  }
+}
