@@ -50,8 +50,12 @@ require('./sourcemap-register.js');/******/
             const core = __importStar(__nccwpck_require__(186));
 
             async function run() {
-                const tag = core.getInput("tag");
-                core.debug(tag);
+                try {
+                    const tag = core.getInput('tag');
+                    console.log(tag);
+                } catch (e) {
+                    core.setFailed(e);
+                }
             }
 
             run();
