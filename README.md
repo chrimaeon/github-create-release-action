@@ -1,16 +1,24 @@
-# Github Release Action
+# GitHub Release Action
 
 This action creates a release from a provided git tag
 
 ## Inputs
 
-### `tag_name` **Required**:
+### `tag_name`:
+
+**Required**
 
 The name of the tag. This should come from the webhook payload, `github.GITHUB_REF` when a user pushes a new tag'
 
-### `description`:
+### `body`:
 
-The release description (can be markdown)
+The release notes to use (can be markdown)
+
+### `body_file`:
+
+A file to the release notes
+
+The release notes (can be markdown)
 
 ### `draft`:
 
@@ -56,5 +64,5 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           tag_name: ${{ github.ref }}
-          description: "this is a sample description"
+          body: "this is a sample description"
 ```

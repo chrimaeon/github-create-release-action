@@ -16,10 +16,15 @@
 
 import * as core from '@actions/core'
 import { context, getOctokit } from '@actions/github'
+import { readFile } from 'fs'
+import { promisify } from 'util'
+
+const readFileAsync = promisify(readFile)
 
 enum ActionInputs {
   TAG_NAME = 'tag_name',
-  DESCRIPTION = 'description',
+  BODY = 'body',
+  BODY_FILE = 'body_file',
   DRAFT = 'draft',
 }
 
@@ -32,10 +37,21 @@ enum ActionOutputs {
 async function run(): Promise<void> {
   try {
     const tag_name = core.getInput(ActionInputs.TAG_NAME, { required: true }).replace('refs/tags/', '')
-    const description = core.getInput(ActionInputs.DESCRIPTION)
+    const body = core.getInput(ActionInputs.BODY)
+    const bodyFile = core.getInput(ActionInputs.BODY_FILE)
     const draft = core.getInput(ActionInputs.DRAFT) === 'true'
     const github = getOctokit(process.env.GITHUB_TOKEN as string).rest
     const { owner, repo } = context.repo
+
+    let bodyFileContent: string | null = null
+    if (bodyFile) {
+      try {
+        bodyFileContent = await readFileAsync(bodyFile, { encoding: 'utf-8' })
+      } catch (e) {
+        return core.setFailed(e as Error)
+      }
+    }
+
     const {
       data: { id: releaseId, html_url: htmlUrl, upload_url: uploadUrl },
     } = await github.repos.createRelease({
@@ -43,7 +59,7 @@ async function run(): Promise<void> {
       repo,
       tag_name,
       name: tag_name,
-      body: description,
+      body: bodyFileContent || body,
       draft,
     })
     core.setOutput(ActionOutputs.ID, releaseId)
