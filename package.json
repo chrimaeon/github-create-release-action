@@ -8,6 +8,7 @@
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
+    "clean": "rm -r dist lib",
     "package": "yarn build && ncc build --source-map --license licenses.txt",
     "lint:check": "eslint './src/**/*.ts'",
     "lint:fix": "eslint --fix './src/**/*.ts'"
