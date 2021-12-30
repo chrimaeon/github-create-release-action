@@ -15,11 +15,40 @@
  */
 
 import * as core from '@actions/core'
+import { context, getOctokit } from '@actions/github'
+
+enum ActionInputs {
+  TAG_NAME = 'tag_name',
+  DESCRIPTION = 'description',
+  DRAFT = 'draft',
+}
+
+enum ActionOutputs {
+  ID = 'id',
+  HTML_URL = 'html_url',
+  UPLOAD_URL = 'upload_url',
+}
 
 async function run(): Promise<void> {
   try {
-    const tag = core.getInput('tag')
-    console.log(tag)
+    const tag_name = core.getInput(ActionInputs.TAG_NAME, { required: true }).replace('refs/tags/', '')
+    const description = core.getInput(ActionInputs.DESCRIPTION)
+    const draft = core.getInput(ActionInputs.DRAFT) === 'true'
+    const github = getOctokit(process.env.GITHUB_TOKEN as string).rest
+    const { owner, repo } = context.repo
+    const {
+      data: { id: releaseId, html_url: htmlUrl, upload_url: uploadUrl },
+    } = await github.repos.createRelease({
+      owner,
+      repo,
+      tag_name,
+      name: tag_name,
+      body: description,
+      draft,
+    })
+    core.setOutput(ActionOutputs.ID, releaseId)
+    core.setOutput(ActionOutputs.HTML_URL, htmlUrl)
+    core.setOutput(ActionOutputs.UPLOAD_URL, uploadUrl)
   } catch (e) {
     core.setFailed(e as Error)
   }
