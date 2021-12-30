@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - '**'
+  workflow_dispatch:
 
 jobs:
   create-github-release:
@@ -11,6 +12,8 @@ jobs:
     steps:
       - name: log tag
         uses: chrimaeon/github-create-release-action@0.1.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         with:
           tag_name: ${{ github.ref }}
           description: "this is a sample description"
