@@ -1,6 +1,6 @@
 {
   "name": "github-create-release-action",
-  "version": "0.1.0-alpha01",
+  "version": "0.1.0",
   "description": "Create a Github Release from a git tag",
   "repository": "git@github.com:chrimaeon/github-create-release-action.git",
   "author": "Christian Grach <christian.grach@cmgapps.com>",
@@ -8,7 +8,8 @@
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
-    "package": "ncc build --source-map --license licenses.txt",
+    "clean": "rm -r dist lib",
+    "package": "yarn build && ncc build --source-map --license licenses.txt",
     "lint:check": "eslint './src/**/*.ts'",
     "lint:fix": "eslint --fix './src/**/*.ts'"
   },
