@@ -1,0 +1,13 @@
+name: Create Github Release
+description: Create a Github Release from a git tag
+inputs:
+  tag:
+    description: The git tag used to create the release
+    required: true
+    default: 'latest'
+  description:
+    description: The discription to use
+    required: false
+runs:
+  using: node16
+  main: "dist/index.js"
