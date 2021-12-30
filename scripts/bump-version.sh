@@ -36,5 +36,5 @@ update_version() {
 update_version "package.json"
 update_version ".github/workflows/main.yml"
 
-#git add package.json .github/workflows/main.yml
-#git commit -m "bump version number"
+git add package.json .github/workflows/main.yml
+git commit -m "bump version number"

@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: log tag
-        uses: chrimaeon/github-create-release-action@0.1.0-alpha01
+        uses: chrimaeon/github-create-release-action@0.1.0
         with:
           tag: ${{ github.ref }}
           description: "this is a sample description"
