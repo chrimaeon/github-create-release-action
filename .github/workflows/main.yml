@@ -1,0 +1,11 @@
+name: Create Github Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-github-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: log tag
+        uses: chrimaeon/github-create-release-action@0.1.0-alpha01
