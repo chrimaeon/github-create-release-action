@@ -10,10 +10,10 @@ inputs:
   body_file:
     description: A file to the release notes
     required: false
-  draft:
-    description: '`true` to create a draft (unpublished) release, `false` to create a published one. Default: `true`'
+  publish:
+    description: '`true` to create a release, `false` to create a draft (unpublished) one. Default: `false`'
     required: false
-    default: 'true'
+    default: 'false'
 outputs:
   id:
     description: 'The ID of the created Release'
@@ -24,3 +24,6 @@ outputs:
 runs:
   using: node16
   main: "dist/index.js"
+branding:
+  color: blue
+  icon: upload

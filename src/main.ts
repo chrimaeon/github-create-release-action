@@ -16,16 +16,13 @@
 
 import * as core from '@actions/core'
 import { context, getOctokit } from '@actions/github'
-import { readFile } from 'fs'
-import { promisify } from 'util'
-
-const readFileAsync = promisify(readFile)
+import { createRelease } from './create_release'
 
 enum ActionInputs {
   TAG_NAME = 'tag_name',
   BODY = 'body',
   BODY_FILE = 'body_file',
-  DRAFT = 'draft',
+  PUBLISH = 'publish',
 }
 
 enum ActionOutputs {
@@ -34,35 +31,29 @@ enum ActionOutputs {
   UPLOAD_URL = 'upload_url',
 }
 
+export type Outputs = {
+  id: number
+  htmlUrl: string
+  uploadUrl: string
+}
+
 async function run(): Promise<void> {
   try {
-    const tag_name = core.getInput(ActionInputs.TAG_NAME, { required: true }).replace('refs/tags/', '')
-    const body = core.getInput(ActionInputs.BODY)
-    const bodyFile = core.getInput(ActionInputs.BODY_FILE)
-    const draft = core.getInput(ActionInputs.DRAFT) === 'true'
-    const github = getOctokit(process.env.GITHUB_TOKEN as string).rest
+    const tagName = core.getInput(ActionInputs.TAG_NAME, { required: true }).replace('refs/tags/', '')
+
+    const github = getOctokit(process.env.GITHUB_TOKEN as string)
     const { owner, repo } = context.repo
-
-    let bodyFileContent: string | null = null
-    if (bodyFile) {
-      try {
-        bodyFileContent = await readFileAsync(bodyFile, { encoding: 'utf-8' })
-      } catch (e) {
-        return core.setFailed(e as Error)
-      }
-    }
-
-    const {
-      data: { id: releaseId, html_url: htmlUrl, upload_url: uploadUrl },
-    } = await github.repos.createRelease({
+    const { id, htmlUrl, uploadUrl } = await createRelease(
+      github,
       owner,
       repo,
-      tag_name,
-      name: tag_name,
-      body: bodyFileContent || body,
-      draft,
-    })
-    core.setOutput(ActionOutputs.ID, releaseId)
+      tagName,
+      core.getBooleanInput(ActionInputs.PUBLISH),
+      core.getInput(ActionInputs.BODY),
+      core.getInput(ActionInputs.BODY_FILE),
+    )
+
+    core.setOutput(ActionOutputs.ID, id)
     core.setOutput(ActionOutputs.HTML_URL, htmlUrl)
     core.setOutput(ActionOutputs.UPLOAD_URL, uploadUrl)
   } catch (e) {
