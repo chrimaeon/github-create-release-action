@@ -20,9 +20,9 @@ A file to the release notes
 
 The release notes (can be markdown)
 
-### `draft`:
+### `publish`:
 
-`true` to create a draft (unpublished) release, `false` to create a published one. Default: `true`'
+`true` to create a release, `false` to create a draft (unpublished) one. Default: `false`
 
 ## Env
 
