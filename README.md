@@ -1,5 +1,8 @@
 # GitHub Release Action
 
+[![Build & Test](https://github.com/chrimaeon/github-create-release-action/actions/workflows/main.yml/badge.svg)](https://github.com/chrimaeon/github-create-release-action/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/chrimaeon/github-create-release-action/branch/main/graph/badge.svg?token=Z285J9PW0D)](https://codecov.io/gh/chrimaeon/github-create-release-action)
+
 This action creates a release from a provided git tag
 
 ## Inputs
