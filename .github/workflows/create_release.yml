@@ -15,4 +15,26 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
         with:
           tag_name: ${{ github.ref }}
-          body: "this is a sample description"
+      - name: Notify Slack
+        uses: chrimaeon/github-slack-action@v1
+        with:
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          channel: ${{ secrets.SLACK_CHANNEL }}
+          text: "New draft release for ${{ github.repository }}"
+          blocks: |
+            [
+              {
+                "type": "header",
+                "text": {
+                  "type": "plain_text",
+                  "text": "New draft release for ${{ github.repository }}"
+                }
+              },
+              {
+                "type": "section",
+                "text": {
+                  "type": "mrkdwn",
+                  "text": "*URL*\n${{ steps.create_release.outputs.html_url }}"
+                }
+              }
+            ]
