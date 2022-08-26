@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create Release
-        uses: chrimaeon/github-create-release-action@0.2.0
+        uses: chrimaeon/github-create-release-action@v1
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
