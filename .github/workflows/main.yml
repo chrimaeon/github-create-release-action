@@ -3,28 +3,27 @@ name: Build & Test
 on:
   push:
 
-
 jobs:
   build-and-test:
     runs-on:
       ubuntu-latest
     steps:
-      - uses: @actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Load .nvmrc
         id: nvmrc
         run: echo "::set-output name=version:$(cat .nvmrc)"
-               - name: Setup Node.js (.nvmrc)
-               uses: actions/setup-node@v2
-               with:
-                 node-version: "${{ steps.nvmrc.outputs.version }}"
-                 cache: yarn
-               - name: Install modules
-                 run: yarn install
-               - name: Build
-                 run: yarn build
-               - name: Lint
-                 run: yarn lint:check
-               - name: Test
-                 run: yarn test --coverage
-               - name: Upload coverage to Codecov
-                 uses: codecov/codecov-action@v2
+      - name: Setup Node.js (.nvmrc)
+        uses: actions/setup-node@v2
+        with:
+          node-version: "${{ steps.nvmrc.outputs.version }}"
+          cache: yarn
+      - name: Install modules
+        run: yarn install
+      - name: Build
+        run: yarn build
+      - name: Lint
+        run: yarn lint:check
+      - name: Test
+        run: yarn test --coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
